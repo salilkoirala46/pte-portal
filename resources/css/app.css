@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html { @apply scroll-smooth; }
+    body { @apply text-gray-900 bg-gray-50; }
+    h1 { @apply text-3xl font-bold tracking-tight; }
+    h2 { @apply text-2xl font-bold tracking-tight; }
+    h3 { @apply text-xl font-semibold; }
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-sm
+               transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed;
+    }
+    .btn-primary {
+        @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    }
+    .btn-secondary {
+        @apply btn bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-primary-500;
+    }
+    .btn-danger {
+        @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+    }
+    .btn-success {
+        @apply btn bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500;
+    }
+    .btn-lg {
+        @apply px-6 py-3 text-base;
+    }
+    .btn-sm {
+        @apply px-3 py-1.5 text-xs;
+    }
+
+    .card {
+        @apply bg-white rounded-xl shadow-sm border border-gray-100;
+    }
+
+    .form-input {
+        @apply block w-full rounded-lg border-gray-300 shadow-sm
+               focus:border-primary-500 focus:ring-primary-500 sm:text-sm;
+    }
+    .form-label {
+        @apply block text-sm font-medium text-gray-700 mb-1;
+    }
+    .form-error {
+        @apply mt-1 text-sm text-red-600;
+    }
+
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+    .badge-speaking  { @apply badge bg-purple-100 text-purple-800; }
+    .badge-reading   { @apply badge bg-cyan-100 text-cyan-800; }
+    .badge-writing   { @apply badge bg-emerald-100 text-emerald-800; }
+    .badge-listening { @apply badge bg-amber-100 text-amber-800; }
+
+    .module-card {
+        @apply card p-6 hover:shadow-md transition-shadow duration-200 cursor-pointer;
+    }
+
+    .exam-container {
+        @apply max-w-4xl mx-auto;
+    }
+
+    /* Recording animation */
+    .recording-indicator {
+        @apply flex items-center gap-2;
+    }
+    .recording-dot {
+        @apply w-3 h-3 rounded-full bg-red-500 animate-pulse;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+        @apply h-2 rounded-full bg-gray-200 overflow-hidden;
+    }
+    .progress-fill {
+        @apply h-full rounded-full transition-all duration-300;
+    }
+
+    /* Blank input */
+    .blank-input {
+        @apply inline-block min-w-[100px] border-b-2 border-primary-500 px-1 mx-1
+               focus:outline-none focus:border-primary-700 text-center;
+    }
+}
+
+/* Drag and drop styles */
+.sortable-ghost {
+    @apply opacity-40 bg-primary-50 border-2 border-primary-300 border-dashed;
+}
+.sortable-chosen {
+    @apply shadow-lg;
+}
+
+/* Audio waveform animation */
+@keyframes waveform {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+}
+.waveform-bar {
+    animation: waveform 1s ease-in-out infinite;
+}
+.waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+.waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+.waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+.waveform-bar:nth-child(5) { animation-delay: 0.4s; }
