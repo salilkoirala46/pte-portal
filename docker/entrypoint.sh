@@ -24,6 +24,9 @@ if [ "$TENANT_COUNT" = "0" ]; then
     php artisan db:seed --force
 fi
 
+mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
 php artisan storage:link --force 2>/dev/null || true
 php artisan config:cache
 php artisan route:cache
