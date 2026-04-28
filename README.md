@@ -44,6 +44,11 @@ A full-featured PTE (Pearson Test of English) exam preparation platform for fore
 
 ## Requirements
 
+### Docker (recommended)
+- [Docker](https://docs.docker.com/get-docker/) 24+
+- [Docker Compose](https://docs.docker.com/compose/install/) v2+
+
+### Local development
 - PHP 8.2+
 - Composer
 - Node.js 18+ and npm
@@ -51,7 +56,108 @@ A full-featured PTE (Pearson Test of English) exam preparation platform for fore
 
 ---
 
-## Installation
+## Running with Docker
+
+Docker is the recommended way to run the application. It bundles PHP-FPM, Nginx, and MySQL into a single `docker compose up` command — no local PHP or Node installation needed.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/salilkoirala46/pte-portal.git
+cd pte-portal
+```
+
+### 2. Build and start the containers
+
+```bash
+docker compose up -d --build
+```
+
+This will:
+- Build a multi-stage image (Node compiles frontend assets, PHP-FPM serves the app)
+- Start a MySQL 8 database container
+- Run migrations and seed the database automatically on first boot
+- Expose the app on **http://localhost:8080**
+
+The first build takes a few minutes. Watch progress with:
+
+```bash
+docker compose logs -f app
+```
+
+Wait until you see:
+
+```
+INFO  Configuration cached successfully.
+INFO  Routes cached successfully.
+```
+
+### 3. Open the app
+
+| URL | Description |
+|-----|-------------|
+| http://localhost:8080 | Landing page |
+| http://localhost:8080/login?tenant=demo | Tenant login |
+
+> The `?tenant=demo` query parameter is required for tenant-scoped accounts (admin and student). The super admin can log in without it.
+
+---
+
+## Demo Credentials
+
+| Role | Email | Password | Login URL |
+|------|-------|----------|-----------|
+| Institution Admin | admin@pteacademy.com | password | http://localhost:8080/login?tenant=demo |
+| Student | student@demo.com | password | http://localhost:8080/login?tenant=demo |
+| Super Admin | super@pteportal.com | password | http://localhost:8080/login |
+
+---
+
+## Docker Commands
+
+```bash
+# Start containers in the background
+docker compose up -d
+
+# Stop containers
+docker compose down
+
+# Rebuild after code changes
+docker compose up -d --build
+
+# View live logs
+docker compose logs -f app
+
+# Run Artisan commands
+docker compose exec app php artisan <command>
+
+# Re-run database seeders
+docker compose exec app php artisan db:seed --force
+
+# Open a shell inside the container
+docker compose exec app sh
+```
+
+### Data persistence
+
+Docker named volumes keep your data between restarts:
+
+| Volume | Contents |
+|--------|----------|
+| `mysql_data` | MySQL database files |
+| `storage_data` | Uploaded files (`storage/app`) |
+| `logs_data` | Application logs (`storage/logs`) |
+
+To wipe everything and start fresh:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+---
+
+## Local Installation (without Docker)
 
 ```bash
 # 1. Clone the repository
@@ -83,16 +189,6 @@ php artisan serve
 ```
 
 Visit `http://localhost:8000?tenant=demo` to see the application.
-
----
-
-## Demo Credentials
-
-| Role | Email | Password |
-|------|-------|----------|
-| Institution Admin | admin@pteacademy.com | password |
-| Student | student@demo.com | password |
-| Super Admin | super@pteportal.com | password |
 
 ---
 
@@ -171,14 +267,22 @@ OPENAI_API_KEY=your_key
 
 ## Development
 
-```bash
-# Run dev server with HMR
-npm run dev
+For local development with hot module replacement (HMR):
 
-# Run Laravel server
+```bash
+# Terminal 1 — Laravel backend
 php artisan serve
 
-# Run both together (two terminals)
+# Terminal 2 — Vite dev server (HMR)
+npm run dev
+```
+
+Then visit `http://localhost:8000?tenant=demo`.
+
+To rebuild frontend assets for production:
+
+```bash
+npm run build
 ```
 
 ---
