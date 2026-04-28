@@ -11,25 +11,29 @@ const sub  = useSubscriptionStore();
 const mobileOpen = ref(false);
 const userMenuOpen = ref(false);
 
+function withPath(items) {
+    return items.map(item => ({ ...item, path: new URL(item.href).pathname }));
+}
+
 const navItems = computed(() => {
     if (auth.isTenantAdmin) {
-        return [
-            { label: 'Dashboard',  href: route('admin.dashboard'),  icon: 'home' },
-            { label: 'Questions',  href: route('admin.questions.index'), icon: 'document' },
-            { label: 'Students',   href: route('admin.students.index'),  icon: 'users' },
-            { label: 'Plans',      href: route('admin.plans.index'),     icon: 'credit-card' },
-            { label: 'Reports',    href: route('admin.reports'),          icon: 'chart' },
-            { label: 'Settings',   href: route('admin.settings'),         icon: 'cog' },
-        ];
+        return withPath([
+            { label: 'Dashboard',  href: route('admin.dashboard'),          icon: 'home' },
+            { label: 'Questions',  href: route('admin.questions.index'),    icon: 'document' },
+            { label: 'Students',   href: route('admin.students.index'),     icon: 'users' },
+            { label: 'Plans',      href: route('admin.plans.index'),        icon: 'credit-card' },
+            { label: 'Reports',    href: route('admin.reports'),            icon: 'chart' },
+            { label: 'Settings',   href: route('admin.settings'),           icon: 'cog' },
+        ]);
     }
-    return [
-        { label: 'Dashboard',  href: route('student.dashboard'),           icon: 'home' },
-        { label: 'Speaking',   href: route('student.speaking.index'),      icon: 'microphone', color: 'text-purple-600' },
-        { label: 'Reading',    href: route('student.reading.index'),       icon: 'book-open',  color: 'text-cyan-600' },
-        { label: 'Writing',    href: route('student.writing.index'),       icon: 'pencil',     color: 'text-emerald-600' },
-        { label: 'Listening',  href: route('student.listening.index'),     icon: 'headphone',  color: 'text-amber-600' },
-        { label: 'My Results', href: route('student.results.index'),       icon: 'chart' },
-    ];
+    return withPath([
+        { label: 'Dashboard',  href: route('student.dashboard'),        icon: 'home' },
+        { label: 'Speaking',   href: route('student.speaking.index'),   icon: 'microphone', color: 'text-purple-600' },
+        { label: 'Reading',    href: route('student.reading.index'),    icon: 'book-open',  color: 'text-cyan-600' },
+        { label: 'Writing',    href: route('student.writing.index'),    icon: 'pencil',     color: 'text-emerald-600' },
+        { label: 'Listening',  href: route('student.listening.index'),  icon: 'headphone',  color: 'text-amber-600' },
+        { label: 'My Results', href: route('student.results.index'),    icon: 'chart' },
+    ]);
 });
 
 function logout() {
@@ -65,7 +69,7 @@ function logout() {
                             :key="item.href"
                             :href="item.href"
                             class="px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-                            :class="$page.url.startsWith(new URL(item.href).pathname)
+                            :class="$page.url.startsWith(item.path)
                                 ? 'bg-primary-50 text-primary-700'
                                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'"
                         >
@@ -118,7 +122,7 @@ function logout() {
                         :key="item.href"
                         :href="item.href"
                         class="block px-3 py-2 rounded-lg text-sm font-medium"
-                        :class="$page.url.startsWith(new URL(item.href).pathname)
+                        :class="$page.url.startsWith(item.path)
                             ? 'bg-primary-50 text-primary-700'
                             : 'text-gray-600 hover:bg-gray-100'"
                         @click="mobileOpen = false"
