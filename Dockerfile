@@ -58,8 +58,8 @@ COPY . .
 # Copy built frontend assets from node-builder stage
 COPY --from=node-builder /app/public/build public/build
 
-# Finish composer setup
-RUN composer dump-autoload --optimize
+# Generate optimised autoloader — skip scripts (package:discover runs at runtime)
+RUN composer dump-autoload --optimize --no-scripts
 
 # Copy config files
 COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
